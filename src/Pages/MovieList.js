@@ -5,12 +5,13 @@ import Form from "react-bootstrap/Form";
 import MovieCard from "../Components/MovieCard";
 import "./MovieList.css";
 
-export default function MovieList(props) {
+export default function MovieList() {
   const dispatch = useDispatch();
   const movieList = useSelector((state) => state.movieList);
-  // const [movieList, setMovieList] = useState([]);
+
   const [selectedCategory, setSelectedCategory] = useState("Show All");
 
+  // dynamic list array of existing categories
   let categories = useMemo(() => loadCategories(movieList), [movieList]);
 
   // number of movies per load
@@ -58,13 +59,19 @@ export default function MovieList(props) {
     }
   }, [load]);
 
-  useEffect(() => {}, []);
-
   return (
-    <div style={{ width: "100%" }}>
+    <div
+      style={{
+        width: "100%",
+      }}
+    >
       <Form>
         <Form.Select
-          style={{ width: "20%", minWidth: "200px", margin: "10px 15px" }}
+          style={{
+            width: "20%",
+            minWidth: "200px",
+            margin: "10px 15px",
+          }}
           onChange={(e) => {
             setSelectedCategory(e.target.value);
             setLoadMore(1);
@@ -72,36 +79,45 @@ export default function MovieList(props) {
           }}
           value={selectedCategory}
         >
-          <option>Show All</option>
+          <option> Show All </option>{" "}
           {categories.map((category, id) => (
-            <option key={id}>{category}</option>
-          ))}
-        </Form.Select>
+            <option key={id}> {category} </option>
+          ))}{" "}
+        </Form.Select>{" "}
         <Form.Control
           type="number"
-          style={{ width: "20%", minWidth: "200px", margin: "10px 15px" }}
+          style={{
+            width: "20%",
+            minWidth: "200px",
+            margin: "10px 15px",
+          }}
           placeholder="Per Load"
           value={load}
           onChange={(e) => {
             setLoad(e.target.value);
           }}
-        />
-      </Form>
+        />{" "}
+      </Form>{" "}
       <div className="parent">
+        {" "}
         {filteredMovieList.map((movie) => (
           <MovieCard key={movie.id} movie={movie} dispatch={dispatch} />
-        ))}
-      </div>
+        ))}{" "}
+      </div>{" "}
       <Button
         variant="secondary"
         size="sm"
-        style={{ position: "fixed", bottom: 10, right: 10 }}
+        style={{
+          position: "fixed",
+          bottom: 10,
+          right: 10,
+        }}
         onClick={() => {
           setLoadMore(loadMore + 1);
         }}
       >
-        Load More
-      </Button>
+        Load More{" "}
+      </Button>{" "}
     </div>
   );
 }

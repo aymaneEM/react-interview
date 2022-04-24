@@ -7,20 +7,19 @@ import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
 import { actions } from "../store/index";
 import { useSelector } from "react-redux";
-
+import { IconButton } from "@mui/material";
 
 export default function MovieCard(props) {
   const [movie, setMovie] = useState(props.movie);
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
-const movieList = useSelector(state => state.movieList)
+  const movieList = useSelector((state) => state.movieList);
 
   const likeHandler = () => {
     if (!liked) {
       props.dispatch(actions.likeMovie(movie.id));
       setMovie({ ...movie, likes: movie.likes + 1 });
       if (disliked) {
-        setDisliked(false);
         props.dispatch(actions.undislikeMovie(movie.id));
         setMovie({ ...movie, dislikes: movie.dislikes - 1 });
       }
@@ -29,6 +28,7 @@ const movieList = useSelector(state => state.movieList)
       setMovie({ ...movie, likes: movie.likes - 1 });
     }
     setLiked(!liked);
+    setDisliked(false);
   };
 
   const dislikeHandler = () => {
@@ -48,14 +48,8 @@ const movieList = useSelector(state => state.movieList)
   };
 
   const deleteHandler = () => {
-    // const temp = [...movieList];
-    // temp.splice(movie.id -1 , 1)
     props.dispatch(actions.deleteMovie(movie.id));
   };
-
-  useEffect(() => {}, [liked, disliked]);
-  useEffect(() => {}, [movieList]);
-  
 
   return (
     <div className="card">
@@ -65,34 +59,30 @@ const movieList = useSelector(state => state.movieList)
         <div
           style={{ display: "flex", marginTop: "10px", marginBottom: "10px" }}
         >
-          <div style={{ marginRight: "1rem" }}>
-            {liked ? (
-              <span onClick={() => likeHandler()} style={{ cursor: "pointer" }}>
-                <ThumbUpIcon />
-              </span>
-            ) : (
-              <span onClick={() => likeHandler()} style={{ cursor: "pointer" }}>
-                <ThumbUpOffAltIcon />
-              </span>
-            )}
-            {movie.likes}
+          <div style={{ marginRight: "1rem", color: "black" }}>
+            {
+              <IconButton
+                disabled={disliked}
+                onClick={() => likeHandler()}
+                size="small"
+                color="inherit"
+              >
+                {liked ? <ThumbUpIcon /> : <ThumbUpOffAltIcon />}
+                {movie.likes}{" "}
+              </IconButton>
+            }
           </div>
-          {disliked ? (
-            <span
+          {
+            <IconButton
+              disabled={liked}
               onClick={() => dislikeHandler()}
-              style={{ cursor: "pointer" }}
+              size="small"
+              color="inherit"
             >
-              <ThumbDownIcon />
-            </span>
-          ) : (
-            <span
-              onClick={() => dislikeHandler()}
-              style={{ cursor: "pointer" }}
-            >
-              <ThumbDownOffAltIcon />
-            </span>
-          )}
-          {movie.dislikes}
+              {disliked ? <ThumbDownIcon /> : <ThumbDownOffAltIcon />}
+              {movie.dislikes}
+            </IconButton>
+          }
           <div>
             <span className="card-delete" onClick={() => deleteHandler()}>
               &times;
