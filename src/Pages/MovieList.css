@@ -1,0 +1,6 @@
+.parent {
+  display: flex;
+  max-width: 1200px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
